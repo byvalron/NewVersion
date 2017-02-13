@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
                     case MotionEvent.ACTION_DOWN:
                         moveThumb(0, 0);
                     case MotionEvent.ACTION_MOVE:
+
                         moveThumb(event.getX() - jRadius, event.getY() - jRadius);
                         double angle = getAngle(event.getX() - jRadius, event.getY() - jRadius);
                         double POWER1 = getPower(event.getX() - jRadius, event.getY() - jRadius);

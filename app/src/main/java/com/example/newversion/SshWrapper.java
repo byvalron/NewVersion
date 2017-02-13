@@ -16,7 +16,7 @@ public class SshWrapper {
 
     String username = "root";
     String password = "root";
-    String hostname = "192.168.1.2";
+    String hostname = "192.168.1.1";
     int port = 22;
 
     public final String TAG = "Test";
