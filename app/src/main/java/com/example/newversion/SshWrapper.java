@@ -14,10 +14,10 @@ import java.io.InputStream;
 
 public class SshWrapper {
 
-    String username = "root";
-    String password = "root";
-    String hostname = "192.168.1.1";
-    int port = 22;
+   public String username = "root";
+   public String password = "root";
+   public String hostname = "192.168.1.1";
+   public int port = 22;
 
     public final String TAG = "Test";
     private boolean isFirstConnect = false;

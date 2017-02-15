@@ -6,13 +6,24 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
+import com.jcraft.jsch.ChannelExec;
+import com.jcraft.jsch.JSchException;
+import com.jcraft.jsch.Session;
+
 
 public class MainActivity extends AppCompatActivity {
 
     private View thumb, joystick;
     private TextView centerText, textView, pow;
 
+    public static void main(String[] args) throws JSchException {
+         Session session = null;
+        ChannelExec testChannel = (ChannelExec) session.openChannel("exec");
+        testChannel.setCommand("true");
+        testChannel.connect();
 
+        testChannel.disconnect();
+    }
 
     public String MoveForward = "echo -e -n \"\\x31\\x2c\\x6f\\x6e\\x2c\\x%1$s\\x2c\\x%2$s\\x2c\" > /dev/ttyUSB0";
     public String MoveLeft = "echo -e -n \"\\x32\\x2c\\x6f\\x6e\\x2c\\x%1$s\\x2c\\x%2$s\\x2c\" > /dev/ttyUSB0";
