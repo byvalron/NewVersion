@@ -1,29 +1,19 @@
 package com.example.newversion;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
-
-import com.jcraft.jsch.ChannelExec;
-import com.jcraft.jsch.JSchException;
-import com.jcraft.jsch.Session;
 
 
 public class MainActivity extends AppCompatActivity {
 
     private View thumb, joystick;
+    private ImageButton stop;
     private TextView centerText, textView, pow;
-
-    public static void main(String[] args) throws JSchException {
-         Session session = null;
-        ChannelExec testChannel = (ChannelExec) session.openChannel("exec");
-        testChannel.setCommand("true");
-        testChannel.connect();
-
-        testChannel.disconnect();
-    }
 
     public String MoveForward = "echo -e -n \"\\x31\\x2c\\x6f\\x6e\\x2c\\x%1$s\\x2c\\x%2$s\\x2c\" > /dev/ttyUSB0";
     public String MoveLeft = "echo -e -n \"\\x32\\x2c\\x6f\\x6e\\x2c\\x%1$s\\x2c\\x%2$s\\x2c\" > /dev/ttyUSB0";
@@ -31,18 +21,26 @@ public class MainActivity extends AppCompatActivity {
     public String MoveRight = "echo -e -n \"\\x33\\x2c\\x6f\\x6e\\x2c\\x%1$s\\x2c\\x%2$s\\x2c\" > /dev/ttyUSB0";
     public String MoveBack = "echo -e -n \"\\x34\\x2c\\x6f\\x6e\\x2c\\x%1$s\\x2c\\x%2$s\\x2c\" > /dev/ttyUSB0";
 
+    private static Context context;
+
     private static final int SCALE = 0xFF;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        stop = (ImageButton) findViewById(R.id.stop);
         thumb = findViewById(R.id.thumb);
         joystick = findViewById(R.id.joystick);
+
         centerText = (TextView) findViewById(R.id.center_text);
         textView = (TextView) findViewById(R.id.textView);
         pow = (TextView) findViewById(R.id.pow);
+
+        MainActivity.context = getApplicationContext();
+        SshWrapper.getInstance().firstConnect(MainActivity.context);
+
 
         joystick.setOnTouchListener(new View.OnTouchListener() {
             float jRadius = getResources().getDimension(R.dimen.joystick_radius) /2;
@@ -50,6 +48,16 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                stop.setOnClickListener(new View.OnClickListener()
+                {
+                    public void onClick(View v)
+                    {
+                        moveThumb(0, 0);
+                        SshWrapper.getInstance().runCommand(MoveStop);
+                        System.out.println(MoveStop);
+                        textView.setText("Direction: ");
+                    }
+                });
 
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
@@ -95,9 +103,20 @@ public class MainActivity extends AppCompatActivity {
                         }
                         break;
                     case MotionEvent.ACTION_UP:
-                        moveThumb(0, 0);
-                        SshWrapper.getInstance().runCommand(MoveStop);
-                        System.out.println(MoveStop);
+                        moveThumb(0,0);
+                    //    moveThumb(event.getX() - jRadius, event.getY() - jRadius);
+                    //    TranslateAnimation a = new TranslateAnimation(
+                     //           Animation.ABSOLUTE, 0,
+                      //          Animation.ABSOLUTE, 0);
+                     //   a.setDuration(3000);
+                       // a.setFillAfter(true);
+                      //  a.setFillBefore(true);
+                       // a.setFillEnabled(true);
+                      //  thumb.startAnimation(a);
+                      //  moveThumb(event.getX() - jRadius, event.getY() - jRadius);
+
+                       // SshWrapper.getInstance().runCommand(MoveStop);
+                       // System.out.println(MoveStop);
                         textView.setText("Direction: ");
                         break;
                     default:
@@ -163,5 +182,8 @@ public class MainActivity extends AppCompatActivity {
                 return Math.min(Math.rint(Math.abs(x) * SCALE), SCALE) * Math.signum(x);
             }
         });
+    }
+    public static Context getAppContext() {
+        return MainActivity.context;
     }
 }

@@ -11,18 +11,18 @@
 
     <ImageView
         android:id="@+id/joystick"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
         android:layout_centerInParent="true"
-        android:background="@drawable/backg" />
+        android:background="@drawable/bg" />
 
     <ImageView
         android:id="@+id/thumb"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:background="@drawable/thumb" />
+        android:background="@drawable/tumb" />
 
     <TextView
         android:text="Direction"
@@ -51,5 +51,15 @@
         android:layout_marginRight="18dp"
         android:layout_marginEnd="18dp"
         android:id="@+id/pow" />
+
+    <ImageButton
+        android:id="@+id/stop"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:background="@drawable/stop"
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/joystick"
+        android:layout_alignEnd="@+id/joystick"
+        android:layout_marginBottom="19dp" />
 
 </RelativeLayout>

@@ -38,12 +38,15 @@ public class SshWrapper {
     private JSch sshChannel = null;
     public Session session = null;
 
-    private Session getSession(/*Context context*/) throws Exception {
+    private Session getSession() throws Exception {
+        Logger.getInstance().Log("Start getSession");
         try {
             ChannelExec testChannel = (ChannelExec) session.openChannel("exec");
             testChannel.setCommand("true");
             testChannel.connect();
-           // LogWrapper.getInstance().addToListLog("Tested session successfully, use it again");
+            //Log.d(TAG, "Tested session successfully, use it again");
+            Logger.getInstance().Log("Tested session successfully, use it again");
+            //LogWrapper.getInstance().addToListLog("Tested session successfully, use it again");
             testChannel.disconnect();
         }
         catch (Throwable t) {
@@ -54,7 +57,7 @@ public class SshWrapper {
 
             session.setPassword(password);
             session.setConfig("StrictHostKeyChecking", "no");
-
+            Logger.getInstance().Log("Try connect...");
           //  LogWrapper.getInstance().addToListLog("Try connect...");
             session.connect();
 
@@ -66,6 +69,7 @@ public class SshWrapper {
     }
 
     public String firstConnect(Context context){
+        Logger.getInstance().Log("firstConnect");
         if(isFirstConnect){
             return "";
         }
@@ -75,9 +79,10 @@ public class SshWrapper {
     }
 
     public String connect(Context context){
-
+        Logger.getInstance().Log("Start connect");
         String err = "";
         if(isConnecting) {
+            Logger.getInstance().Log("error_connecting_in_process");
            // err = context.getResources().getString(R.string.error_connecting_in_process);
           //  LogWrapper.getInstance().addToListLog(err);
             return err;
@@ -102,6 +107,7 @@ public class SshWrapper {
                 return err;
             }
             catch (Exception e) {
+
               //  err = e.getMessage();
                // LogWrapper.getInstance().addToListLog(err);
                 return err;
@@ -112,6 +118,7 @@ public class SshWrapper {
         }
         else
         {
+            Logger.getInstance().Log("errUnknownIP");
            // err = context.getResources().getString(R.string.errUnknownIP);
            // LogWrapper.getInstance().addToListLog(err);
         }
@@ -124,6 +131,7 @@ public class SshWrapper {
 
         if (sshChannel != null && session!= null && session.isConnected())
         {
+            Logger.getInstance().Log("Set disConnect");
            // LogWrapper.getInstance().addToListLog("Set disConnect");
             session.disconnect();
         }
@@ -134,7 +142,7 @@ public class SshWrapper {
     }
 
     public String runCommand(String command){
-
+        Logger.getInstance().Log("Start runCommand");
         String err = "";
 /*        if (!InternetConnection.isOnline(mContext)) {
             disConnect();
@@ -143,12 +151,14 @@ public class SshWrapper {
         }*/
 
         if(isConnecting) {
+            Logger.getInstance().Log("error_connecting_in_process");
            // err = mContext.getResources().getString(R.string.error_connecting_in_process);
            // LogWrapper.getInstance().addToListLog(err);
             return err;
         }
 
         if(session == null || !session.isConnected()){
+            Logger.getInstance().Log("errNoConnect");
            // err = mContext.getResources().getString(R.string.errNoConnect);
 
             return err;
@@ -183,6 +193,7 @@ public class SshWrapper {
                     if(i<0)break;
                     System.out.print(new String(tmp, 0, i));
                     if(i != 0) {
+                        Logger.getInstance().Log(new String(tmp, 0, i));
                       //  LogWrapper.getInstance().addToListLog(new String(tmp, 0, i));
                     }
                 }
@@ -191,6 +202,7 @@ public class SshWrapper {
                     int status = channel.getExitStatus();
                     System.out.println("exit-status: " + status);
                     if(status != 0) {
+                        Logger.getInstance().Log("exit-status: " + status);
                        // LogWrapper.getInstance().addToListLog("exit-status: " + status);
                     }
                     break;
@@ -205,7 +217,7 @@ public class SshWrapper {
         }
         catch (JSchException e) {
 
-           // err = e.getMessage();
+            err = e.getMessage();
            // LogWrapper.getInstance().addToListLog(err);
             return err;
         }
