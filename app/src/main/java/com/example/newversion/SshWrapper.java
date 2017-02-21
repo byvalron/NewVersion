@@ -44,7 +44,7 @@ public class SshWrapper {
             ChannelExec testChannel = (ChannelExec) session.openChannel("exec");
             testChannel.setCommand("true");
             testChannel.connect();
-            //Log.d(TAG, "Tested session successfully, use it again");
+
             Logger.getInstance().Log("Tested session successfully, use it again");
             //LogWrapper.getInstance().addToListLog("Tested session successfully, use it again");
             testChannel.disconnect();
@@ -60,7 +60,7 @@ public class SshWrapper {
             Logger.getInstance().Log("Try connect...");
           //  LogWrapper.getInstance().addToListLog("Try connect...");
             session.connect();
-
+            Logger.getInstance().Log("errConnectionSuccessful");
           //  String err = context.getResources().getString(R.string.errConnectionSuccessful);
            // LogWrapper.getInstance().addToListLog(err);
 
@@ -71,6 +71,7 @@ public class SshWrapper {
     public String firstConnect(Context context){
         Logger.getInstance().Log("firstConnect");
         if(isFirstConnect){
+
             return "";
         }
         isFirstConnect = true;
@@ -128,7 +129,7 @@ public class SshWrapper {
     }
 
     public void disConnect(){
-
+        Logger.getInstance().Log("Try disConnect");
         if (sshChannel != null && session!= null && session.isConnected())
         {
             Logger.getInstance().Log("Set disConnect");
@@ -140,6 +141,7 @@ public class SshWrapper {
         sshChannel = null;
 
     }
+
 
     public String runCommand(String command){
         Logger.getInstance().Log("Start runCommand");

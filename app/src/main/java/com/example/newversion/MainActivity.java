@@ -6,14 +6,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.TextView;
 
 
 public class MainActivity extends AppCompatActivity {
 
     private View thumb, joystick;
     private ImageButton stop;
-    private TextView centerText, textView, pow;
 
     public String MoveForward = "echo -e -n \"\\x31\\x2c\\x6f\\x6e\\x2c\\x%1$s\\x2c\\x%2$s\\x2c\" > /dev/ttyUSB0";
     public String MoveLeft = "echo -e -n \"\\x32\\x2c\\x6f\\x6e\\x2c\\x%1$s\\x2c\\x%2$s\\x2c\" > /dev/ttyUSB0";
@@ -34,9 +32,6 @@ public class MainActivity extends AppCompatActivity {
         thumb = findViewById(R.id.thumb);
         joystick = findViewById(R.id.joystick);
 
-        centerText = (TextView) findViewById(R.id.center_text);
-        textView = (TextView) findViewById(R.id.textView);
-        pow = (TextView) findViewById(R.id.pow);
 
         MainActivity.context = getApplicationContext();
         SshWrapper.getInstance().firstConnect(MainActivity.context);
@@ -55,7 +50,6 @@ public class MainActivity extends AppCompatActivity {
                         moveThumb(0, 0);
                         SshWrapper.getInstance().runCommand(MoveStop);
                         System.out.println(MoveStop);
-                        textView.setText("Direction: ");
                     }
                 });
 
@@ -79,27 +73,23 @@ public class MainActivity extends AppCompatActivity {
                         if(NEXT >= 338.5 || NEXT < 22.5 ) {
                             SshWrapper.getInstance().runCommand(RIGHT);
                             System.out.println(RIGHT);
-                            textView.setText("Direction: RIGHT");
                         } else if(NEXT >= 22.5 && NEXT < 67.5 ) {
-                            textView.setText("Direction: DOWN_RIGHT");
+                            System.out.println("DOWN_RIGHT");
                         } else if(NEXT >= 67.5 && NEXT < 113.5 ) {
                             SshWrapper.getInstance().runCommand(DOWN);
                             System.out.println(DOWN);
-                            textView.setText("Direction: DOWN");
                         } else if(NEXT >= 113.5 && NEXT < 158.5 ) {
-                            textView.setText("Direction: DOWN_LEFT");
+                            System.out.println("DOWN_LEFT");
                         } else if(NEXT >= 158.5 && NEXT < 203.5 ) {
                             SshWrapper.getInstance().runCommand(LEFT);
                             System.out.println(LEFT);
-                            textView.setText("Direction: LEFT");
                         } else if(NEXT >= 203.5 && NEXT < 248.5 ) {
-                            textView.setText("Direction: UP_LEFT");
+                            System.out.println("UP_LEFT");
                         } else if(NEXT >= 248.5 && NEXT < 293.5 ) {
                             SshWrapper.getInstance().runCommand(UP);
                             System.out.println(UP);
-                            textView.setText("Direction: UP");
                         } else if(NEXT >= 293.5 && NEXT < 338.5 ) {
-                            textView.setText("Direction: UP_RIGHT");
+                            System.out.println("UP_RIGHT");
                         }
                         break;
                     case MotionEvent.ACTION_UP:
@@ -117,7 +107,6 @@ public class MainActivity extends AppCompatActivity {
 
                        // SshWrapper.getInstance().runCommand(MoveStop);
                        // System.out.println(MoveStop);
-                        textView.setText("Direction: ");
                         break;
                     default:
                 }
@@ -127,12 +116,7 @@ public class MainActivity extends AppCompatActivity {
             public void moveThumb(float x, float y) {
                 double angle = getAngle(x, -y);
                 double radius = getRadius(x, -y);
-                double POWER = getPower(x, -y);
-                final double RADIAN = 180 / Math.PI;
-                final double NEXT = angle * RADIAN;
 
-                centerText.setText(String.valueOf((int) (NEXT)) + ":"+ Integer.toHexString(Integer.parseInt(String.valueOf((int) (POWER)))).toUpperCase());
-                pow.setText(String.valueOf((int) getPower(x) + " : " + (int) getPower(-y)));
                 x = (float) (radius * Math.cos(angle)) * jRadius + joystick.getX() + jRadius - tRadius;
                 y = -(float) (radius * Math.sin(angle)) * jRadius + joystick.getY() + jRadius - tRadius;
 
@@ -176,11 +160,6 @@ public class MainActivity extends AppCompatActivity {
                 return Math.min(Math.sqrt(x * x + y * y), radius) / radius * SCALE;
             }
 
-            // Скоростьпо X Y
-            public double getPower(float x) {
-                x /= jRadius - tRadius;
-                return Math.min(Math.rint(Math.abs(x) * SCALE), SCALE) * Math.signum(x);
-            }
         });
     }
     public static Context getAppContext() {
