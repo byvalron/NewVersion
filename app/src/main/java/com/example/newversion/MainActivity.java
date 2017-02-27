@@ -1,6 +1,7 @@
 package com.example.newversion;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
@@ -20,8 +21,8 @@ public class MainActivity extends AppCompatActivity {
     public String MoveBack = "echo -e -n \"\\x34\\x2c\\x6f\\x6e\\x2c\\x%1$s\\x2c\\x%2$s\\x2c\" > /dev/ttyUSB0";
 
     private static Context context;
-
-    private static final int SCALE = 0xFF;
+    public static String command;
+    private static final int SCALE = 0x55;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,8 +34,11 @@ public class MainActivity extends AppCompatActivity {
         joystick = findViewById(R.id.joystick);
 
 
+        context = this;
         MainActivity.context = getApplicationContext();
-        SshWrapper.getInstance().firstConnect(MainActivity.context);
+       //SshWrapper.getInstance().connect(MainActivity.context);
+        new ConnectTask().execute();
+        new Command().execute();
 
 
         joystick.setOnTouchListener(new View.OnTouchListener() {
@@ -162,6 +166,25 @@ public class MainActivity extends AppCompatActivity {
 
         });
     }
+    class ConnectTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            String result = SshWrapper.getInstance().firstConnect(context);
+            return null;
+        }
+    }
+    class Command extends AsyncTask<String, Void, Void> {
+
+        @Override
+        protected Void doInBackground(String... voids) {
+
+            String result1 = SshWrapper.getInstance().runCommand(command);
+            return null;
+        }
+    }
+
+
     public static Context getAppContext() {
         return MainActivity.context;
     }
