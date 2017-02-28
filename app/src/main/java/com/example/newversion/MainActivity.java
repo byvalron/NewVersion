@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         MainActivity.context = getApplicationContext();
        //SshWrapper.getInstance().connect(MainActivity.context);
         new ConnectTask().execute();
-        new Command().execute();
+      //  new Command().execute();
 
 
         joystick.setOnTouchListener(new View.OnTouchListener() {
@@ -166,23 +166,29 @@ public class MainActivity extends AppCompatActivity {
 
         });
     }
-    class ConnectTask extends AsyncTask<Void, Void, Void> {
+    class ConnectTask extends AsyncTask<Void, Void, String> {
 
         @Override
-        protected Void doInBackground(Void... voids) {
+        protected String doInBackground(Void... params) {
             String result = SshWrapper.getInstance().firstConnect(context);
+           // String result1 = SshWrapper.getInstance().runCommand(command);
             return null;
         }
+        @Override
+        protected void onPostExecute(String result) {
+            String result1 = SshWrapper.getInstance().runCommand(command);
+            super.onPostExecute(result1);
+
+        }
     }
-    class Command extends AsyncTask<String, Void, Void> {
+/*    class Command extends AsyncTask<String, String, String> {
 
         @Override
-        protected Void doInBackground(String... voids) {
+        protected String doInBackground(String... strings) {
 
-            String result1 = SshWrapper.getInstance().runCommand(command);
             return null;
         }
-    }
+    }*/
 
 
     public static Context getAppContext() {
