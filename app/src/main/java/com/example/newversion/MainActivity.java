@@ -33,6 +33,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         stop = (ImageButton) findViewById(R.id.stop);
+        stop.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                command = MoveStop;
+                new CommandTask().execute();
+                System.out.println(MoveStop);
+            }
+        });
+
         thumb = findViewById(R.id.thumb);
         joystick = findViewById(R.id.joystick);
         uu = (ImageButton) findViewById(R.id.uu);
@@ -57,9 +67,13 @@ public class MainActivity extends AppCompatActivity {
                         final String POWER2 = Integer.toHexString(Integer.parseInt(String.valueOf((int)POWER1))).toUpperCase();
 
                         final String UP = String.format(MoveForward, POWER2, POWER2);
+                        final String UP_LEFT = String.format(MoveForward, 0, POWER2);
+                        final String UP_RIGHT = String.format(MoveForward, POWER2, 0);
                         final String LEFT = String.format(MoveLeft, POWER2, POWER2);
                         final String RIGHT = String.format(MoveRight, POWER2, POWER2);
                         final String DOWN = String.format(MoveBack, POWER2, POWER2);
+                        final String DOWN_LEFT = String.format(MoveBack, 0, POWER2);
+                        final String DOWN_RIGHT = String.format(MoveBack, POWER2, 0);
 
                         final double RADIAN = 180 / Math.PI;
                         final double NEXT = angle * RADIAN;
@@ -67,22 +81,26 @@ public class MainActivity extends AppCompatActivity {
                             command = RIGHT;
                             System.out.println(RIGHT);
                         } else if(NEXT >= 22.5 && NEXT < 67.5 ) {
-                            System.out.println("DOWN_RIGHT");
+                            command = DOWN_RIGHT;
+                            System.out.println(DOWN_RIGHT);
                         } else if(NEXT >= 67.5 && NEXT < 113.5 ) {
                             command = DOWN;
                             System.out.println(DOWN);
                         } else if(NEXT >= 113.5 && NEXT < 158.5 ) {
-                            System.out.println("DOWN_LEFT");
+                            command = DOWN_LEFT;
+                            System.out.println(DOWN_LEFT);
                         } else if(NEXT >= 158.5 && NEXT < 203.5 ) {
                             command = LEFT;
                             System.out.println(LEFT);
                         } else if(NEXT >= 203.5 && NEXT < 248.5 ) {
-                            System.out.println("UP_LEFT");
+                            command = UP_LEFT;
+                            System.out.println(UP_LEFT);
                         } else if(NEXT >= 248.5 && NEXT < 293.5 ) {
                             command = UP;
                             System.out.println(UP);
                         } else if(NEXT >= 293.5 && NEXT < 338.5 ) {
-                            System.out.println("UP_RIGHT");
+                            command = UP_RIGHT;
+                            System.out.println(UP_RIGHT);
                         }
                         break;
                     case MotionEvent.ACTION_UP:
@@ -105,15 +123,6 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     default:
                 }
-                stop.setOnClickListener(new View.OnClickListener()
-                {
-                    public void onClick(View v)
-                    {
-                        moveThumb(0, 0);
-                        command = MoveStop;
-                        System.out.println(MoveStop);
-                    }
-                });
                 new CommandTask().execute();
                 return true;
             }
@@ -170,17 +179,20 @@ public class MainActivity extends AppCompatActivity {
         {
             public void onClick(View v)
             {
+
                 if(flag) {
                     new ConnectTask().execute();
                     uu.setBackgroundResource(R.drawable.uuu);
                     Toast.makeText(MainActivity.getAppContext(),"Connect", Toast.LENGTH_SHORT).show();
                     System.out.println("Connect");
-                }else{
-                    flag = !flag;
+                }
+                else{
+                    new DestroyTask().execute();
                     uu.setBackgroundResource(R.drawable.u);
                     Toast.makeText(MainActivity.getAppContext(),"FALSE!!!", Toast.LENGTH_SHORT).show();
                     System.out.println("FALSE!!!");
-                }
+                }flag = !flag;
+
             }
         });
     }
@@ -198,7 +210,13 @@ public class MainActivity extends AppCompatActivity {
             return null;
         }
     }
-
+    class DestroyTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... voids) {
+            void rfe = SshWrapper.getInstance().Destroy();
+            return null;
+        }
+    }
     public static Context getAppContext() {
         return MainActivity.context;
     }
