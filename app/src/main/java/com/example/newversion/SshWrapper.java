@@ -224,7 +224,7 @@ public class SshWrapper {
         return err;
     }
 
-    public void Destroy(){
+    public void Destroy(Context cont){
         disConnect();
         //Logger.getInstance().Log("Start disConnect");
     }

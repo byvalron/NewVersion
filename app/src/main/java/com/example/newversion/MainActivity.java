@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
     public String MoveRight = "echo -e -n \"\\x33\\x2c\\x6f\\x6e\\x2c\\x%1$s\\x2c\\x%2$s\\x2c\" > /dev/ttyUSB0";
     public String MoveBack = "echo -e -n \"\\x34\\x2c\\x6f\\x6e\\x2c\\x%1$s\\x2c\\x%2$s\\x2c\" > /dev/ttyUSB0";
 
-    private static Context context;
+    private static Context context, cont;
     public static String command;
     private static final int SCALE = 0x55;
 
@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
         uu = (ImageButton) findViewById(R.id.uu);
 
         context = this;
+        cont = this;
         MainActivity.context = getApplicationContext();
 
         joystick.setOnTouchListener(new View.OnTouchListener() {
@@ -58,7 +59,6 @@ public class MainActivity extends AppCompatActivity {
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-                        moveThumb(0, 0);
                     case MotionEvent.ACTION_MOVE:
 
                         moveThumb(event.getX() - jRadius, event.getY() - jRadius);
@@ -179,7 +179,6 @@ public class MainActivity extends AppCompatActivity {
         {
             public void onClick(View v)
             {
-
                 if(flag) {
                     new ConnectTask().execute();
                     uu.setBackgroundResource(R.drawable.uuu);
@@ -192,7 +191,6 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.getAppContext(),"FALSE!!!", Toast.LENGTH_SHORT).show();
                     System.out.println("FALSE!!!");
                 }flag = !flag;
-
             }
         });
     }
@@ -212,8 +210,8 @@ public class MainActivity extends AppCompatActivity {
     }
     class DestroyTask extends AsyncTask<Void, Void, Void> {
         @Override
-        protected Void doInBackground(Void... voids) {
-            void rfe = SshWrapper.getInstance().Destroy();
+        protected Void doInBackground(Void... params) {
+            SshWrapper.getInstance().Destroy(cont);
             return null;
         }
     }
