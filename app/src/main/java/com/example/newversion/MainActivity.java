@@ -1,6 +1,7 @@
 package com.example.newversion;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -13,7 +14,7 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity {
 
     private View thumb, joystick;
-    private ImageButton stop, uu;
+    private ImageButton stop, uu, cc;
 
     boolean flag = true;
 
@@ -24,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     public String MoveBack = "echo -e -n \"\\x34\\x2c\\x6f\\x6e\\x2c\\x%1$s\\x2c\\x%2$s\\x2c\" > /dev/ttyUSB0";
 
     private static Context context, cont;
-    public static String command;
+    public static String command, str;
     private static final int SCALE = 0x55;
 
     @Override
@@ -46,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         thumb = findViewById(R.id.thumb);
         joystick = findViewById(R.id.joystick);
         uu = (ImageButton) findViewById(R.id.uu);
+        cc = (ImageButton) findViewById(R.id.cc);
 
         context = this;
         cont = this;
@@ -67,62 +69,67 @@ public class MainActivity extends AppCompatActivity {
                         final String POWER2 = Integer.toHexString(Integer.parseInt(String.valueOf((int)POWER1))).toUpperCase();
 
                         final String UP = String.format(MoveForward, POWER2, POWER2);
-                        final String UP_LEFT = String.format(MoveForward, 0, POWER2);
+                        final String UP_LEFT = String.format(MoveForward, 1, POWER2);
                         final String UP_RIGHT = String.format(MoveForward, POWER2, 0);
                         final String LEFT = String.format(MoveLeft, POWER2, POWER2);
                         final String RIGHT = String.format(MoveRight, POWER2, POWER2);
                         final String DOWN = String.format(MoveBack, POWER2, POWER2);
-                        final String DOWN_LEFT = String.format(MoveBack, 0, POWER2);
+                        final String DOWN_LEFT = String.format(MoveBack, 1, POWER2);
                         final String DOWN_RIGHT = String.format(MoveBack, POWER2, 0);
 
                         final double RADIAN = 180 / Math.PI;
                         final double NEXT = angle * RADIAN;
                         if(NEXT >= 338.5 || NEXT < 22.5 ) {
+                            str = RIGHT;
                             command = RIGHT;
                             System.out.println(RIGHT);
                         } else if(NEXT >= 22.5 && NEXT < 67.5 ) {
+                            str = DOWN_RIGHT;
                             command = DOWN_RIGHT;
                             System.out.println(DOWN_RIGHT);
                         } else if(NEXT >= 67.5 && NEXT < 113.5 ) {
+                            str = DOWN;
                             command = DOWN;
                             System.out.println(DOWN);
                         } else if(NEXT >= 113.5 && NEXT < 158.5 ) {
+                            str = DOWN_LEFT;
                             command = DOWN_LEFT;
                             System.out.println(DOWN_LEFT);
                         } else if(NEXT >= 158.5 && NEXT < 203.5 ) {
+                            str = LEFT;
                             command = LEFT;
                             System.out.println(LEFT);
                         } else if(NEXT >= 203.5 && NEXT < 248.5 ) {
+                            str = UP_LEFT;
                             command = UP_LEFT;
                             System.out.println(UP_LEFT);
                         } else if(NEXT >= 248.5 && NEXT < 293.5 ) {
+                            str = UP;
                             command = UP;
                             System.out.println(UP);
                         } else if(NEXT >= 293.5 && NEXT < 338.5 ) {
+                            str = UP_RIGHT;
                             command = UP_RIGHT;
                             System.out.println(UP_RIGHT);
                         }
                         break;
                     case MotionEvent.ACTION_UP:
                         moveThumb(0,0);
+/*                        TranslateAnimation a = new TranslateAnimation();
+                        moveThumb(event.getX() - jRadius, event.getY() - jRadius);
+                        a.setDuration(3000);
+                        a.setFillEnabled(true);
+                        thumb.startAnimation(a);
+                        */
+                       // moveThumb(event.getX() - jRadius, event.getY() - jRadius);
+                       // SshWrapper.getInstance().runCommand(MoveStop);
+                        str = MoveStop;
                         command = MoveStop;
                         System.out.println(MoveStop);
-                    //    moveThumb(event.getX() - jRadius, event.getY() - jRadius);
-                    //    TranslateAnimation a = new TranslateAnimation(
-                     //           Animation.ABSOLUTE, 0,
-                      //          Animation.ABSOLUTE, 0);
-                     //   a.setDuration(3000);
-                       // a.setFillAfter(true);
-                      //  a.setFillBefore(true);
-                       // a.setFillEnabled(true);
-                      //  thumb.startAnimation(a);
-                      //  moveThumb(event.getX() - jRadius, event.getY() - jRadius);
-
-                       // SshWrapper.getInstance().runCommand(MoveStop);
-                       // System.out.println(MoveStop);
                         break;
                     default:
                 }
+                new LogTask().execute();
                 new CommandTask().execute();
                 return true;
             }
@@ -193,6 +200,14 @@ public class MainActivity extends AppCompatActivity {
                 }flag = !flag;
             }
         });
+        cc.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                Intent intent = new Intent(MainActivity.this, Logger.class);
+                startActivity(intent);
+            }
+        });
     }
     class ConnectTask extends AsyncTask<Void, Void, Void> {
         @Override
@@ -205,6 +220,13 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... params) {
             String result1 = SshWrapper.getInstance().runCommand(command);
+            return null;
+        }
+    }
+    class LogTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... params) {
+            String result1 = Logger.getInstance().Log(str);
             return null;
         }
     }
