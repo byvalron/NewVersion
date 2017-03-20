@@ -12,21 +12,38 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".MainActivity">
+        <activity
+            android:name="com.example.newversion.MainActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="landscape">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
+
+        </activity>
+
+        <activity
+            android:name="com.example.newversion.SettingActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="landscape">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.newversion.MainActivity" />
+            </activity>
+
+        <activity
+            android:label="@string/title_activity_log"
+            android:name="com.example.newversion.LogActivity"
+            android:parentActivityName="com.example.newversion.MainActivity"
+            android:screenOrientation="landscape">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.newversion.MainActivity" />
         </activity>
-
-        <activity android:name=".Logger">
-            </activity>
-
     </application>
 
 </manifest>

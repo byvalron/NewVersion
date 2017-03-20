@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
@@ -25,8 +26,8 @@ public class MainActivity extends AppCompatActivity {
     public String MoveBack = "echo -e -n \"\\x34\\x2c\\x6f\\x6e\\x2c\\x%1$s\\x2c\\x%2$s\\x2c\" > /dev/ttyUSB0";
 
     private static Context context, cont;
-    public static String command, str;
-    private static final int SCALE = 0x55;
+    public static String command;
+    private static final int SCALE = 0x50;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +51,6 @@ public class MainActivity extends AppCompatActivity {
         cc = (ImageButton) findViewById(R.id.cc);
 
         context = this;
-        cont = this;
         MainActivity.context = getApplicationContext();
 
         joystick.setOnTouchListener(new View.OnTouchListener() {
@@ -80,56 +80,39 @@ public class MainActivity extends AppCompatActivity {
                         final double RADIAN = 180 / Math.PI;
                         final double NEXT = angle * RADIAN;
                         if(NEXT >= 338.5 || NEXT < 22.5 ) {
-                            str = RIGHT;
                             command = RIGHT;
                             System.out.println(RIGHT);
                         } else if(NEXT >= 22.5 && NEXT < 67.5 ) {
-                            str = DOWN_RIGHT;
                             command = DOWN_RIGHT;
                             System.out.println(DOWN_RIGHT);
                         } else if(NEXT >= 67.5 && NEXT < 113.5 ) {
-                            str = DOWN;
                             command = DOWN;
                             System.out.println(DOWN);
                         } else if(NEXT >= 113.5 && NEXT < 158.5 ) {
-                            str = DOWN_LEFT;
                             command = DOWN_LEFT;
                             System.out.println(DOWN_LEFT);
                         } else if(NEXT >= 158.5 && NEXT < 203.5 ) {
-                            str = LEFT;
                             command = LEFT;
                             System.out.println(LEFT);
                         } else if(NEXT >= 203.5 && NEXT < 248.5 ) {
-                            str = UP_LEFT;
+
                             command = UP_LEFT;
                             System.out.println(UP_LEFT);
                         } else if(NEXT >= 248.5 && NEXT < 293.5 ) {
-                            str = UP;
                             command = UP;
                             System.out.println(UP);
                         } else if(NEXT >= 293.5 && NEXT < 338.5 ) {
-                            str = UP_RIGHT;
                             command = UP_RIGHT;
                             System.out.println(UP_RIGHT);
                         }
                         break;
                     case MotionEvent.ACTION_UP:
                         moveThumb(0,0);
-/*                        TranslateAnimation a = new TranslateAnimation();
-                        moveThumb(event.getX() - jRadius, event.getY() - jRadius);
-                        a.setDuration(3000);
-                        a.setFillEnabled(true);
-                        thumb.startAnimation(a);
-                        */
-                       // moveThumb(event.getX() - jRadius, event.getY() - jRadius);
-                       // SshWrapper.getInstance().runCommand(MoveStop);
-                        str = MoveStop;
                         command = MoveStop;
                         System.out.println(MoveStop);
                         break;
                     default:
                 }
-                new LogTask().execute();
                 new CommandTask().execute();
                 return true;
             }
@@ -204,7 +187,7 @@ public class MainActivity extends AppCompatActivity {
         {
             public void onClick(View v)
             {
-                Intent intent = new Intent(MainActivity.this, Logger.class);
+                Intent intent = new Intent(MainActivity.this, SettingActivity.class);
                 startActivity(intent);
             }
         });
@@ -223,21 +206,20 @@ public class MainActivity extends AppCompatActivity {
             return null;
         }
     }
-    class LogTask extends AsyncTask<Void, Void, Void> {
-        @Override
-        protected Void doInBackground(Void... params) {
-            String result1 = Logger.getInstance().Log(str);
-            return null;
-        }
-    }
+
     class DestroyTask extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... params) {
-            SshWrapper.getInstance().Destroy(cont);
+            String res = SshWrapper.getInstance().disConnect();
             return null;
         }
     }
     public static Context getAppContext() {
         return MainActivity.context;
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.log, menu);
+        return true;
     }
 }

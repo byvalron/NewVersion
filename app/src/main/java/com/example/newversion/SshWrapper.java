@@ -11,13 +11,12 @@ import com.jcraft.jsch.Session;
 import java.io.IOException;
 import java.io.InputStream;
 
-
 public class SshWrapper {
 
-   public String username = "root";
+/*   public String username = "root";
    public String password = "root";
    public String hostname = "192.168.1.1";
-   public int port = 22;
+   public int port = 22;*/
 
     public final String TAG = "Test";
     private boolean isFirstConnect = false;
@@ -38,39 +37,31 @@ public class SshWrapper {
     private JSch sshChannel = null;
     public Session session = null;
 
-
-
     private Session getSession(Context context) throws Exception {
         try {
             ChannelExec testChannel = (ChannelExec) session.openChannel("exec");
             testChannel.setCommand("true");
             testChannel.connect();
-           // Logger.getInstance().Log("Tested session successfully, use it again");
+           // SettingActivity.getInstance().Log("Tested session successfully, use it again");
             testChannel.disconnect();
         }
         catch (Throwable t) {
-            /*LogWrapper.getInstance().addToListLog("Session broken. Build new");
-            session = sshChannel.getSession(ConnectSettings.getInstance().UserName, ConnectSettings.getInstance().IP, ConnectSettings.getInstance().Port);
-            session.setConfig("StrictHostKeyChecking", "no");
-            session.connect();*/
-
             sshChannel = new JSch();
 
-            session = sshChannel.getSession(username, hostname, port);
+            session = sshChannel.getSession(SettingSingleton.getInstance().username, SettingSingleton.getInstance().hostname, SettingSingleton.getInstance().port);
 
-            session.setPassword(password);
+            session.setPassword(SettingSingleton.getInstance().password);
             session.setConfig("StrictHostKeyChecking", "no");
 
-            //Logger.getInstance().Log("Try connect...");
+            //SettingActivity.getInstance().Log("Try connect...");
             session.connect();
-
-            //Logger.getInstance().Log("errConnectionSuccessful");
+            //SettingActivity.getInstance().Log("errConnectionSuccessful");
         }
         return session;
     }
 
     public String firstConnect(Context context){
-       //Logger.getInstance().Log("firstConnect");
+       //SettingActivity.getInstance().Log("firstConnect");
         if(isFirstConnect){
 
             return "";
@@ -81,10 +72,10 @@ public class SshWrapper {
     }
 
     public String connect(Context context){
-        //Logger.getInstance().Log("Start connect");
+        //SettingActivity.getInstance().Log("Start connect");
         String err = "";
         if(isConnecting) {
-            //Logger.getInstance().Log("error_connecting_in_process");
+            //SettingActivity.getInstance().Log("error_connecting_in_process");
 
             return err;
         }
@@ -95,22 +86,22 @@ public class SshWrapper {
             disConnect();
         }
 
-        if (hostname != null
-                && !hostname.isEmpty()
-                && !hostname.equals("null"))
+        if (SettingSingleton.getInstance().hostname != null
+                && !SettingSingleton.getInstance().hostname.isEmpty()
+                && !SettingSingleton.getInstance().hostname.equals("null"))
         {
             try {
                 session = getSession(context);
             }
             catch (JSchException e) {
                 err = e.getMessage();
-                //Logger.getInstance().Log(err);
+                //SettingActivity.getInstance().Log(err);
                 return err;
             }
             catch (Exception e) {
 
                 err = e.getMessage();
-                //Logger.getInstance().Log(err);
+                //SettingActivity.getInstance().Log(err);
                 return err;
             }
             finally {
@@ -119,44 +110,38 @@ public class SshWrapper {
         }
         else
         {
-          //  Logger.getInstance().Log("errUnknownIP");
+          //  SettingActivity.getInstance().Log("errUnknownIP");
         }
 
         isConnecting = false;
         return err;
     }
 
-    public void disConnect(){
-      //  Logger.getInstance().Log("Try disConnect");
+    public String disConnect(){
+        String err = "";
+      //  SettingActivity.getInstance().Log("Try disConnect");
         if (sshChannel != null && session!= null && session.isConnected())
         {
-           // Logger.getInstance().Log("Set disConnect");
+           // SettingActivity.getInstance().Log("Set disConnect");
             session.disconnect();
         }
 
         session = null;
         sshChannel = null;
-
+        return err;
     }
 
-
     public String runCommand(String command){
-       // Logger.getInstance().Log("Start runCommand");
+       // SettingActivity.getInstance().Log("Start runCommand");
         String err = "";
-/*        if (!InternetConnection.isOnline(mContext)) {
-            disConnect();
-           // err = mContext.getString(R.string.error_no_connection_internet);
-            return err;
-        }*/
-
 
         if(isConnecting) {
-            //Logger.getInstance().Log("error_connecting_in_process");
+            //SettingActivity.getInstance().Log("error_connecting_in_process");
             return err;
         }
 
         if(session == null || !session.isConnected()){
-           // Logger.getInstance().Log("errNoConnect");
+           // SettingActivity.getInstance().Log("errNoConnect");
             return err;
         }
 
@@ -166,7 +151,7 @@ public class SshWrapper {
         }
         catch (JSchException e) {
             err = e.getMessage();
-           // Logger.getInstance().Log(err+"111");
+           // SettingActivity.getInstance().Log(err+"111");
             return err;
         }
 
@@ -188,7 +173,7 @@ public class SshWrapper {
                     if(i<0)break;
                     System.out.print(new String(tmp, 0, i));
                     if(i != 0) {
-                       // Logger.getInstance().Log(new String(tmp, 0, i));
+                       // SettingActivity.getInstance().Log(new String(tmp, 0, i));
                     }
                 }
                 if(channel.isClosed()){
@@ -196,7 +181,7 @@ public class SshWrapper {
                     int status = channel.getExitStatus();
                     System.out.println("exit-status: " + status);
                     if(status != 0) {
-                        //Logger.getInstance().Log("exit-status: " + status);
+                        //SettingActivity.getInstance().Log("exit-status: " + status);
                     }
                     break;
                 }
@@ -204,19 +189,19 @@ public class SshWrapper {
                     Thread.sleep(1000);
                 }
                 catch(Exception e){
-                    //Logger.getInstance().Log(e.getMessage()+"222");
+                    //SettingActivity.getInstance().Log(e.getMessage()+"222");
                 }
             }
         }
         catch (JSchException e) {
 
             err = e.getMessage();
-           // Logger.getInstance().Log(err+"333");
+           // SettingActivity.getInstance().Log(err+"333");
             return err;
         }
         catch (IOException e) {
             err = e.getMessage();
-           // Logger.getInstance().Log(err+"444");
+           // SettingActivity.getInstance().Log(err+"444");
             return err;
         }
 
@@ -224,8 +209,8 @@ public class SshWrapper {
         return err;
     }
 
-    public void Destroy(Context cont){
+    public void Destroy(){
         disConnect();
-        //Logger.getInstance().Log("Start disConnect");
+        //SettingActivity.getInstance().Log("Start disConnect");
     }
 }
