@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
@@ -25,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     public String MoveRight = "echo -e -n \"\\x33\\x2c\\x6f\\x6e\\x2c\\x%1$s\\x2c\\x%2$s\\x2c\" > /dev/ttyUSB0";
     public String MoveBack = "echo -e -n \"\\x34\\x2c\\x6f\\x6e\\x2c\\x%1$s\\x2c\\x%2$s\\x2c\" > /dev/ttyUSB0";
 
-    private static Context context, cont;
+    private static Context context;
     public static String command;
     private static final int SCALE = 0x50;
 
@@ -176,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
                     System.out.println("Connect");
                 }
                 else{
-                    new DestroyTask().execute();
+                    SshWrapper.getInstance().disConnect();
                     uu.setBackgroundResource(R.drawable.u);
                     Toast.makeText(MainActivity.getAppContext(),"FALSE!!!", Toast.LENGTH_SHORT).show();
                     System.out.println("FALSE!!!");
@@ -207,19 +208,17 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    class DestroyTask extends AsyncTask<Void, Void, Void> {
-        @Override
-        protected Void doInBackground(Void... params) {
-            String res = SshWrapper.getInstance().disConnect();
-            return null;
-        }
-    }
     public static Context getAppContext() {
         return MainActivity.context;
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.log, menu);
+        getMenuInflater().inflate(R.menu.main_log, menu);
         return true;
     }
+    public void onMenuClick(MenuItem item) {
+        Intent intent1 = new Intent(MainActivity.this, LogActivity.class);
+        startActivity(intent1);
+    }
+
 }

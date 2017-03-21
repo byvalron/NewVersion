@@ -13,10 +13,6 @@ import java.io.InputStream;
 
 public class SshWrapper {
 
-/*   public String username = "root";
-   public String password = "root";
-   public String hostname = "192.168.1.1";
-   public int port = 22;*/
 
     public final String TAG = "Test";
     private boolean isFirstConnect = false;
@@ -42,7 +38,7 @@ public class SshWrapper {
             ChannelExec testChannel = (ChannelExec) session.openChannel("exec");
             testChannel.setCommand("true");
             testChannel.connect();
-           // SettingActivity.getInstance().Log("Tested session successfully, use it again");
+            LogSingleton.getInstance().addToListLog("Tested session successfully, use it again");
             testChannel.disconnect();
         }
         catch (Throwable t) {
@@ -53,15 +49,15 @@ public class SshWrapper {
             session.setPassword(SettingSingleton.getInstance().password);
             session.setConfig("StrictHostKeyChecking", "no");
 
-            //SettingActivity.getInstance().Log("Try connect...");
+            LogSingleton.getInstance().addToListLog("Try connect...");
             session.connect();
-            //SettingActivity.getInstance().Log("errConnectionSuccessful");
+            LogSingleton.getInstance().addToListLog("errConnectionSuccessful");
         }
         return session;
     }
 
     public String firstConnect(Context context){
-       //SettingActivity.getInstance().Log("firstConnect");
+       LogSingleton.getInstance().addToListLog("firstConnect");
         if(isFirstConnect){
 
             return "";
@@ -72,10 +68,10 @@ public class SshWrapper {
     }
 
     public String connect(Context context){
-        //SettingActivity.getInstance().Log("Start connect");
+        LogSingleton.getInstance().addToListLog("Start connect");
         String err = "";
         if(isConnecting) {
-            //SettingActivity.getInstance().Log("error_connecting_in_process");
+            LogSingleton.getInstance().addToListLog("error_connecting_in_process");
 
             return err;
         }
@@ -95,13 +91,13 @@ public class SshWrapper {
             }
             catch (JSchException e) {
                 err = e.getMessage();
-                //SettingActivity.getInstance().Log(err);
+                LogSingleton.getInstance().addToListLog(err);
                 return err;
             }
             catch (Exception e) {
 
                 err = e.getMessage();
-                //SettingActivity.getInstance().Log(err);
+                LogSingleton.getInstance().addToListLog(err);
                 return err;
             }
             finally {
@@ -110,7 +106,7 @@ public class SshWrapper {
         }
         else
         {
-          //  SettingActivity.getInstance().Log("errUnknownIP");
+          LogSingleton.getInstance().addToListLog("errUnknownIP");
         }
 
         isConnecting = false;
@@ -119,10 +115,10 @@ public class SshWrapper {
 
     public String disConnect(){
         String err = "";
-      //  SettingActivity.getInstance().Log("Try disConnect");
+      LogSingleton.getInstance().addToListLog("Try disConnect");
         if (sshChannel != null && session!= null && session.isConnected())
         {
-           // SettingActivity.getInstance().Log("Set disConnect");
+           LogSingleton.getInstance().addToListLog("Set disConnect");
             session.disconnect();
         }
 
@@ -132,16 +128,16 @@ public class SshWrapper {
     }
 
     public String runCommand(String command){
-       // SettingActivity.getInstance().Log("Start runCommand");
+       LogSingleton.getInstance().addToListLog("Start runCommand");
         String err = "";
 
         if(isConnecting) {
-            //SettingActivity.getInstance().Log("error_connecting_in_process");
+            LogSingleton.getInstance().addToListLog("error_connecting_in_process");
             return err;
         }
 
         if(session == null || !session.isConnected()){
-           // SettingActivity.getInstance().Log("errNoConnect");
+           LogSingleton.getInstance().addToListLog("errNoConnect");
             return err;
         }
 
@@ -151,7 +147,7 @@ public class SshWrapper {
         }
         catch (JSchException e) {
             err = e.getMessage();
-           // SettingActivity.getInstance().Log(err+"111");
+           LogSingleton.getInstance().addToListLog(err);
             return err;
         }
 
@@ -173,7 +169,7 @@ public class SshWrapper {
                     if(i<0)break;
                     System.out.print(new String(tmp, 0, i));
                     if(i != 0) {
-                       // SettingActivity.getInstance().Log(new String(tmp, 0, i));
+                       LogSingleton.getInstance().addToListLog(new String(tmp, 0, i));
                     }
                 }
                 if(channel.isClosed()){
@@ -181,7 +177,7 @@ public class SshWrapper {
                     int status = channel.getExitStatus();
                     System.out.println("exit-status: " + status);
                     if(status != 0) {
-                        //SettingActivity.getInstance().Log("exit-status: " + status);
+                        LogSingleton.getInstance().addToListLog("exit-status: " + status);
                     }
                     break;
                 }
@@ -189,19 +185,19 @@ public class SshWrapper {
                     Thread.sleep(1000);
                 }
                 catch(Exception e){
-                    //SettingActivity.getInstance().Log(e.getMessage()+"222");
+                    LogSingleton.getInstance().addToListLog(e.getMessage());
                 }
             }
         }
         catch (JSchException e) {
 
             err = e.getMessage();
-           // SettingActivity.getInstance().Log(err+"333");
+           LogSingleton.getInstance().addToListLog(err);
             return err;
         }
         catch (IOException e) {
             err = e.getMessage();
-           // SettingActivity.getInstance().Log(err+"444");
+           LogSingleton.getInstance().addToListLog(err);
             return err;
         }
 
@@ -211,6 +207,6 @@ public class SshWrapper {
 
     public void Destroy(){
         disConnect();
-        //SettingActivity.getInstance().Log("Start disConnect");
+        LogSingleton.getInstance().addToListLog("Start disConnect");
     }
 }

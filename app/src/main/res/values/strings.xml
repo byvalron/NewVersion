@@ -2,5 +2,6 @@
     <string name="app_name">NewVersion</string>
     <string name="title_activity_log">Log</string>
     <string name="action_settings">Log</string>
+    <string name="action_clear">CLEAR</string>
 
 </resources>

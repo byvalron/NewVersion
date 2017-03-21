@@ -1,12 +1,13 @@
 package com.example.newversion;
 
-import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 
 /**
@@ -15,7 +16,6 @@ import android.widget.Toast;
 
 public class SettingActivity extends AppCompatActivity {
 
-    private static Context context;
     public  EditText host, user, pass,por;
     public Button save;
     @Override
@@ -23,7 +23,6 @@ public class SettingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.setting_list);
 
-        SettingActivity.context = getApplicationContext();
 
         save = (Button) findViewById(R.id.save);
 
@@ -42,21 +41,23 @@ public class SettingActivity extends AppCompatActivity {
             public void onClick(View v)
             {
                 SettingSingleton.getInstance().hostname = SettingActivity.this.host.getText().toString();
-                Toast.makeText(SettingActivity.getAppContext(), SettingSingleton.getInstance().hostname, Toast.LENGTH_SHORT).show();
-
                 SettingSingleton.getInstance().username = SettingActivity.this.user.getText().toString();
-                Toast.makeText(SettingActivity.getAppContext(), SettingSingleton.getInstance().username , Toast.LENGTH_SHORT).show();
-
                 SettingSingleton.getInstance().password = SettingActivity.this.pass.getText().toString();
-                Toast.makeText(SettingActivity.getAppContext(), SettingSingleton.getInstance().password , Toast.LENGTH_SHORT).show();
-
                 SettingSingleton.getInstance().port = Integer.valueOf(SettingActivity.this.por.getText().toString()).intValue();
-              //  Toast.makeText(SettingActivity.getAppContext(), SettingSingleton.getInstance().port , Toast.LENGTH_SHORT).show();
 
+                LogSingleton.getInstance().addToListLog(SettingActivity.this.por.getText().toString());
+                LogSingleton.getInstance().addToListLog(SettingActivity.this.pass.getText().toString());
+                LogSingleton.getInstance().addToListLog(SettingActivity.this.user.getText().toString());
+                LogSingleton.getInstance().addToListLog(SettingActivity.this.host.getText().toString());
             }
         });
     }
-    public static Context getAppContext() {
-        return SettingActivity.context;
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_log, menu);
+        return true;
+    }
+    public void onMenuClick(MenuItem item) {
+        Intent intent1 = new Intent(SettingActivity.this, LogActivity.class);
+        startActivity(intent1);
     }
 }
