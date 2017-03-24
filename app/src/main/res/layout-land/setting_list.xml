@@ -10,43 +10,38 @@
         android:id="@+id/save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="Save"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="226dp"
-        android:layout_marginTop="17dp" />
+        android:text="@string/save"
+        android:layout_marginTop="17dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignEnd="@+id/linearLayout" />
 <LinearLayout
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:gravity="right"
+    android:gravity="end"
     android:orientation="vertical"
-    android:layout_marginStart="77dp"
-    android:layout_marginTop="45dp"
+    android:layout_marginStart="30dp"
+    android:layout_marginTop="43dp"
     android:layout_below="@+id/save"
-    android:layout_alignParentStart="true">
+    android:id="@+id/linearLayout">
 
     <LinearLayout
         android:id="@+id/row"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="92dp">
+        android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Hostname" />
+            android:text="@string/hostname" />
 
         <EditText
             android:id="@+id/hostname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ems="15"
+            android:ems="10"
             android:inputType="textPersonName"
-            android:text="Hostname" />
+            android:text="@string/hostname" />
 
     </LinearLayout>
 
@@ -54,73 +49,123 @@
     <LinearLayout
         android:id="@+id/row2"
         android:layout_width="wrap_content"
-        android:layout_weight="1"
-        android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/row"
-        android:layout_below="@+id/row">
+        android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Username" />
+            android:text="@string/username" />
 
         <EditText
             android:id="@+id/username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ems="15"
+            android:ems="10"
             android:inputType="textPersonName"
-            android:text="Username" />
+            android:text="@string/username" />
     </LinearLayout>
 
 
     <LinearLayout
     android:layout_height="wrap_content"
-        android:layout_weight="1"
     android:layout_width="wrap_content"
-    android:id="@+id/row3"
-    android:layout_below="@+id/row2"
-    android:layout_alignEnd="@+id/row2">
+    android:id="@+id/row3">
     <TextView
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Password" />
+        android:text="@string/password" />
 
     <EditText
-        android:id="@+id/password"
+        android:id="@+id/passw"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="15"
+        android:ems="10"
         android:inputType="textPersonName"
-        android:text="Password" />
+        android:text="@string/password" />
 
 </LinearLayout>
-
 
 <LinearLayout
     android:layout_height="wrap_content"
     android:layout_width="wrap_content"
-    android:layout_weight="1"
-    android:id="@+id/row4"
-    android:layout_below="@+id/row3"
-    android:layout_alignEnd="@+id/row2">
+    android:id="@+id/row4">
     <TextView
         android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Port" />
+        android:text="@string/port" />
 
     <EditText
         android:id="@+id/port"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="15"
+        android:ems="10"
         android:inputType="textPersonName"
-        android:text="Port" />
+        android:text="@string/port" />
 </LinearLayout>
 
 </LinearLayout>
+
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="end"
+        android:layout_alignTop="@+id/linearLayout"
+        android:layout_toEndOf="@+id/linearLayout"
+        android:layout_marginStart="48dp"
+        android:id="@+id/linearLayout3">
+
+        <EditText
+            android:id="@+id/Text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="27"
+            android:inputType="textPersonName"
+            android:text="@string/text" />
+
+        <EditText
+            android:id="@+id/Text2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="27"
+            android:inputType="textPersonName"
+            android:text="@string/text" />
+
+        <EditText
+        android:id="@+id/Text3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="27"
+        android:inputType="textPersonName"
+        android:text="@string/text" />
+
+    <EditText
+        android:id="@+id/Text4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="27"
+        android:inputType="textPersonName"
+        android:text="@string/text" />
+
+    <EditText
+        android:id="@+id/Text5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="27"
+        android:inputType="textPersonName"
+        android:text="@string/text" />
+    </LinearLayout>
+    <Button
+        android:id="@+id/savecom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/save"
+        android:layout_alignTop="@+id/save"
+        android:layout_alignEnd="@+id/linearLayout3" />
 
 </RelativeLayout>

@@ -16,25 +16,37 @@ import android.widget.EditText;
 
 public class SettingActivity extends AppCompatActivity {
 
-    public  EditText host, user, pass,por;
-    public Button save;
+    public  EditText host, user, pass, por, com1, com2, com3, com4, com5;
+    public Button save, save2;
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.setting_list);
 
-
         save = (Button) findViewById(R.id.save);
+        save2 = (Button) findViewById(R.id.savecom);
 
         host = (EditText) findViewById(R.id.hostname);
         user = (EditText) findViewById(R.id.username);
-        pass = (EditText) findViewById(R.id.password);
+        pass = (EditText) findViewById(R.id.passw);
         por = (EditText) findViewById(R.id.port);
 
-        host.setText("192.168.1.1");
-        user.setText("root");
-        pass.setText("root");
+        com1 = (EditText) findViewById(R.id.Text);
+        com2 = (EditText) findViewById(R.id.Text2);
+        com3 = (EditText) findViewById(R.id.Text3);
+        com4 = (EditText) findViewById(R.id.Text4);
+        com5 = (EditText) findViewById(R.id.Text5);
+
+        host.setText(SettingSingleton.getInstance().hostname);
+        user.setText(SettingSingleton.getInstance().username);
+        pass.setText(SettingSingleton.getInstance().password);
         por.setText("22");
+
+        com1.setText(SettingSingleton.getInstance().MoveForward);
+        com2.setText(SettingSingleton.getInstance().MoveLeft);
+        com3.setText(SettingSingleton.getInstance().MoveRight);
+        com4.setText(SettingSingleton.getInstance().MoveBack);
+        com5.setText(SettingSingleton.getInstance().MoveStop);
 
         save.setOnClickListener(new View.OnClickListener()
         {
@@ -49,6 +61,23 @@ public class SettingActivity extends AppCompatActivity {
                 LogSingleton.getInstance().addToListLog(SettingActivity.this.pass.getText().toString());
                 LogSingleton.getInstance().addToListLog(SettingActivity.this.user.getText().toString());
                 LogSingleton.getInstance().addToListLog(SettingActivity.this.host.getText().toString());
+            }
+        });
+        save2.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                SettingSingleton.getInstance().MoveForward = SettingActivity.this.com1.getText().toString();
+                SettingSingleton.getInstance().MoveLeft = SettingActivity.this.com2.getText().toString();
+                SettingSingleton.getInstance().MoveRight = SettingActivity.this.com3.getText().toString();
+                SettingSingleton.getInstance().MoveBack = SettingActivity.this.com4.getText().toString();
+                SettingSingleton.getInstance().MoveStop = SettingActivity.this.com5.getText().toString();
+
+                LogSingleton.getInstance().addToListLog("new " + SettingActivity.this.com1.getText().toString());
+                LogSingleton.getInstance().addToListLog("new " + SettingActivity.this.com2.getText().toString());
+                LogSingleton.getInstance().addToListLog("new " + SettingActivity.this.com3.getText().toString());
+                LogSingleton.getInstance().addToListLog("new " + SettingActivity.this.com4.getText().toString());
+                LogSingleton.getInstance().addToListLog("new " + SettingActivity.this.com5.getText().toString());
             }
         });
     }

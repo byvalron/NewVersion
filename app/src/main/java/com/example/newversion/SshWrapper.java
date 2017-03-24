@@ -12,8 +12,6 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class SshWrapper {
-
-
     public final String TAG = "Test";
     private boolean isFirstConnect = false;
     private boolean isConnecting = false;
@@ -38,87 +36,70 @@ public class SshWrapper {
             ChannelExec testChannel = (ChannelExec) session.openChannel("exec");
             testChannel.setCommand("true");
             testChannel.connect();
-            LogSingleton.getInstance().addToListLog("Tested session successfully, use it again");
+            LogSingleton.getInstance().addToListLog("Tested_session_successfully,_use_it_again");
             testChannel.disconnect();
         }
         catch (Throwable t) {
             sshChannel = new JSch();
-
-            session = sshChannel.getSession(SettingSingleton.getInstance().username, SettingSingleton.getInstance().hostname, SettingSingleton.getInstance().port);
-
+            session = sshChannel.getSession(SettingSingleton.getInstance().username,
+                    SettingSingleton.getInstance().hostname,
+                    SettingSingleton.getInstance().port);
             session.setPassword(SettingSingleton.getInstance().password);
             session.setConfig("StrictHostKeyChecking", "no");
-
-            LogSingleton.getInstance().addToListLog("Try connect...");
+            LogSingleton.getInstance().addToListLog("Try_Connect...");
             session.connect();
-            LogSingleton.getInstance().addToListLog("errConnectionSuccessful");
+            LogSingleton.getInstance().addToListLog("Error_Connection_Successful");
         }
         return session;
     }
 
     public String firstConnect(Context context){
-       LogSingleton.getInstance().addToListLog("firstConnect");
         if(isFirstConnect){
-
             return "";
         }
         isFirstConnect = true;
-
         return connect(context);
     }
 
-    public String connect(Context context){
-        LogSingleton.getInstance().addToListLog("Start connect");
-        String err = "";
-        if(isConnecting) {
-            LogSingleton.getInstance().addToListLog("error_connecting_in_process");
-
-            return err;
-        }
-        isConnecting = true;
-
-        if (sshChannel != null)
-        {
-            disConnect();
-        }
-
-        if (SettingSingleton.getInstance().hostname != null
-                && !SettingSingleton.getInstance().hostname.isEmpty()
-                && !SettingSingleton.getInstance().hostname.equals("null"))
-        {
-            try {
-                session = getSession(context);
-            }
-            catch (JSchException e) {
-                err = e.getMessage();
-                LogSingleton.getInstance().addToListLog(err);
-                return err;
-            }
-            catch (Exception e) {
-
-                err = e.getMessage();
-                LogSingleton.getInstance().addToListLog(err);
-                return err;
-            }
-            finally {
-                isConnecting = false;
-            }
-        }
-        else
-        {
-          LogSingleton.getInstance().addToListLog("errUnknownIP");
-        }
-
-        isConnecting = false;
+public String connect(Context context) {
+    String err = BuildConfig.FLAVOR;
+    if (isConnecting) {
+        LogSingleton.getInstance().addToListLog("Error_Connecting_In_Process");
         return err;
     }
+    isConnecting = true;
+    if (sshChannel != null) {
+        disConnect();
+    }
+    if (SettingSingleton.getInstance().hostname == null
+            || SettingSingleton.getInstance().hostname.isEmpty()
+            || SettingSingleton.getInstance().hostname.equals("null"))
+    {
+        LogSingleton.getInstance().addToListLog("Error_Unknown_IP");
+    } else {
+        try {
+            session = getSession(context);
+        } catch (JSchException e) {
+            err = e.getMessage();
+            LogSingleton.getInstance().addToListLog(err);
+            return err;
+        } catch (Exception e2) {
+            err = e2.getMessage();
+            LogSingleton.getInstance().addToListLog(err);
+            return err;
+        } finally {
+            isConnecting = false;
+        }
+    }
+    isConnecting = false;
+    return err;
+}
 
     public String disConnect(){
         String err = "";
-      LogSingleton.getInstance().addToListLog("Try disConnect");
         if (sshChannel != null && session!= null && session.isConnected())
         {
-           LogSingleton.getInstance().addToListLog("Set disConnect");
+           LogSingleton.getInstance().addToListLog("Set_DisConnect");
             session.disconnect();
         }
 
@@ -128,19 +109,15 @@ public class SshWrapper {
     }
 
     public String runCommand(String command){
-       LogSingleton.getInstance().addToListLog("Start runCommand");
         String err = "";
-
         if(isConnecting) {
-            LogSingleton.getInstance().addToListLog("error_connecting_in_process");
+            LogSingleton.getInstance().addToListLog("Error_Connecting_In_Process");
             return err;
         }
-
         if(session == null || !session.isConnected()){
-           LogSingleton.getInstance().addToListLog("errNoConnect");
+           LogSingleton.getInstance().addToListLog("Err_No_Connect");
             return err;
         }
-
         Channel channel= null;
         try {
             channel = session.openChannel("exec");
@@ -150,17 +127,13 @@ public class SshWrapper {
            LogSingleton.getInstance().addToListLog(err);
             return err;
         }
-
         ((ChannelExec) channel).setCommand(command);
         channel.setInputStream(null);
         ((ChannelExec)channel).setErrStream(System.err);
-
         try {
-
             {
                 channel.connect();
             }
-
             final InputStream in = channel.getInputStream();
             byte[] tmp=new byte[1024];
             while(true){
@@ -190,7 +163,6 @@ public class SshWrapper {
             }
         }
         catch (JSchException e) {
-
             err = e.getMessage();
            LogSingleton.getInstance().addToListLog(err);
             return err;
@@ -200,13 +172,11 @@ public class SshWrapper {
            LogSingleton.getInstance().addToListLog(err);
             return err;
         }
-
         channel.disconnect();
         return err;
     }
 
     public void Destroy(){
         disConnect();
-        LogSingleton.getInstance().addToListLog("Start disConnect");
     }
 }

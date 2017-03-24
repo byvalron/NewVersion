@@ -14,17 +14,10 @@ import android.widget.Toast;
 
 
 public class MainActivity extends AppCompatActivity {
-
     private View thumb, joystick;
     private ImageButton stop, uu, cc;
 
     boolean flag = true;
-
-    public String MoveForward = "echo -e -n \"\\x31\\x2c\\x6f\\x6e\\x2c\\x%1$s\\x2c\\x%2$s\\x2c\" > /dev/ttyUSB0";
-    public String MoveLeft = "echo -e -n \"\\x32\\x2c\\x6f\\x6e\\x2c\\x%1$s\\x2c\\x%2$s\\x2c\" > /dev/ttyUSB0";
-    public String MoveStop = "echo -e -n \"\\x35\\x2c\\x6f\\x6e\\x2c\" > /dev/ttyUSB0";
-    public String MoveRight = "echo -e -n \"\\x33\\x2c\\x6f\\x6e\\x2c\\x%1$s\\x2c\\x%2$s\\x2c\" > /dev/ttyUSB0";
-    public String MoveBack = "echo -e -n \"\\x34\\x2c\\x6f\\x6e\\x2c\\x%1$s\\x2c\\x%2$s\\x2c\" > /dev/ttyUSB0";
 
     private static Context context;
     public static String command;
@@ -40,9 +33,9 @@ public class MainActivity extends AppCompatActivity {
         {
             public void onClick(View v)
             {
-                command = MoveStop;
+                command = SettingSingleton.getInstance().MoveStop;
                 new CommandTask().execute();
-                System.out.println(MoveStop);
+                LogSingleton.getInstance().addToListLog(SettingSingleton.getInstance().MoveStop);
             }
         });
 
@@ -69,48 +62,47 @@ public class MainActivity extends AppCompatActivity {
                         double POWER1 = getPower(event.getX() - jRadius, event.getY() - jRadius);
                         final String POWER2 = Integer.toHexString(Integer.parseInt(String.valueOf((int)POWER1))).toUpperCase();
 
-                        final String UP = String.format(MoveForward, POWER2, POWER2);
-                        final String UP_LEFT = String.format(MoveForward, 1, POWER2);
-                        final String UP_RIGHT = String.format(MoveForward, POWER2, 0);
-                        final String LEFT = String.format(MoveLeft, POWER2, POWER2);
-                        final String RIGHT = String.format(MoveRight, POWER2, POWER2);
-                        final String DOWN = String.format(MoveBack, POWER2, POWER2);
-                        final String DOWN_LEFT = String.format(MoveBack, 1, POWER2);
-                        final String DOWN_RIGHT = String.format(MoveBack, POWER2, 0);
+                        final String UP = String.format(SettingSingleton.getInstance().MoveForward, POWER2, POWER2);
+                        final String UP_LEFT = String.format(SettingSingleton.getInstance().MoveForward, 1, POWER2);
+                        final String UP_RIGHT = String.format(SettingSingleton.getInstance().MoveForward, POWER2, 0);
+                        final String LEFT = String.format(SettingSingleton.getInstance().MoveLeft, POWER2, POWER2);
+                        final String RIGHT = String.format(SettingSingleton.getInstance().MoveRight, POWER2, POWER2);
+                        final String DOWN = String.format(SettingSingleton.getInstance().MoveBack, POWER2, POWER2);
+                        final String DOWN_LEFT = String.format(SettingSingleton.getInstance().MoveBack, 1, POWER2);
+                        final String DOWN_RIGHT = String.format(SettingSingleton.getInstance().MoveBack, POWER2, 0);
 
                         final double RADIAN = 180 / Math.PI;
                         final double NEXT = angle * RADIAN;
                         if(NEXT >= 338.5 || NEXT < 22.5 ) {
                             command = RIGHT;
-                            System.out.println(RIGHT);
+                            LogSingleton.getInstance().addToListLog(RIGHT);
                         } else if(NEXT >= 22.5 && NEXT < 67.5 ) {
                             command = DOWN_RIGHT;
-                            System.out.println(DOWN_RIGHT);
+                            LogSingleton.getInstance().addToListLog(DOWN_RIGHT);
                         } else if(NEXT >= 67.5 && NEXT < 113.5 ) {
                             command = DOWN;
-                            System.out.println(DOWN);
+                            LogSingleton.getInstance().addToListLog(DOWN);
                         } else if(NEXT >= 113.5 && NEXT < 158.5 ) {
                             command = DOWN_LEFT;
-                            System.out.println(DOWN_LEFT);
+                            LogSingleton.getInstance().addToListLog(DOWN_LEFT);
                         } else if(NEXT >= 158.5 && NEXT < 203.5 ) {
                             command = LEFT;
-                            System.out.println(LEFT);
+                            LogSingleton.getInstance().addToListLog(LEFT);
                         } else if(NEXT >= 203.5 && NEXT < 248.5 ) {
-
                             command = UP_LEFT;
-                            System.out.println(UP_LEFT);
+                            LogSingleton.getInstance().addToListLog(UP_LEFT);
                         } else if(NEXT >= 248.5 && NEXT < 293.5 ) {
                             command = UP;
-                            System.out.println(UP);
+                            LogSingleton.getInstance().addToListLog(UP);
                         } else if(NEXT >= 293.5 && NEXT < 338.5 ) {
                             command = UP_RIGHT;
-                            System.out.println(UP_RIGHT);
+                            LogSingleton.getInstance().addToListLog(UP_RIGHT);
                         }
                         break;
                     case MotionEvent.ACTION_UP:
                         moveThumb(0,0);
-                        command = MoveStop;
-                        System.out.println(MoveStop);
+                        command = SettingSingleton.getInstance().MoveStop;
+                        LogSingleton.getInstance().addToListLog(SettingSingleton.getInstance().MoveStop);
                         break;
                     default:
                 }
