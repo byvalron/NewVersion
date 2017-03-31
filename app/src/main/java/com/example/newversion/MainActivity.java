@@ -15,13 +15,15 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     private View thumb, joystick;
-    private ImageButton stop, uu, cc;
+    private ImageButton stop, uu, cc, bb;
 
     boolean flag = true;
 
     private static Context context;
     public static String command;
     private static final int SCALE = 0x50;
+
+    private String oldCommand = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
         joystick = findViewById(R.id.joystick);
         uu = (ImageButton) findViewById(R.id.uu);
         cc = (ImageButton) findViewById(R.id.cc);
+        bb = (ImageButton) findViewById(R.id.bb);
 
         context = this;
         MainActivity.context = getApplicationContext();
@@ -195,7 +198,11 @@ public class MainActivity extends AppCompatActivity {
     class CommandTask extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... params) {
+            if(command == oldCommand){
+                return null;
+            }
             String result1 = SshWrapper.getInstance().runCommand(command);
+            oldCommand = command;
             return null;
         }
     }

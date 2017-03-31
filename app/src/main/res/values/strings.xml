@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">NewVersion</string>
+    <string name="app_name">Robot Control</string>
     <string name="title_activity_log">Log</string>
     <string name="action_settings">Log</string>
     <string name="action_clear">CLEAR</string>
@@ -10,13 +10,8 @@
     <string name="password">Password</string>
     <string name="port">Port</string>
     <string name="action_log_clear">Clear</string>
-    <string name="error_no_connection_internet">No connection to the Internet</string>
-    <string name="errConnectionSuccessful">Connection is successful</string>
-    <string name="error_connecting_in_process">Connecting in process...</string>
-    <string name="errUnknownIP">Unknown IP</string>
-    <string name="errNoConnect">Session is not connected</string>
-    <string name="error_connection_internet">Error connection to the Internet</string>
-    <string name="try_connect">Try connect...</string>
-    <string name="set_disconnect">Set disConnect</string>
+    <string name="user_set">User Setting</string>
+    <string name="comm_set">Edit Commands</string>
+
 
 </resources>
