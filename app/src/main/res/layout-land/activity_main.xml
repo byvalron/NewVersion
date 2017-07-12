@@ -31,7 +31,6 @@
         android:id="@+id/thumb"
         android:layout_width="100dp"
         android:layout_height="100dp"
-
         android:background="@drawable/tumb"
         android:layout_marginRight="99dp"
         android:layout_marginEnd="99dp"
